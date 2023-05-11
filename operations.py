@@ -16,14 +16,30 @@ def purchase_laptop():
         laptops = list(laptops)
         for i in range(len(laptops)):
             if laptops[i][0] == item:
-                laptops[i][4] = str(int(laptops[i][4]) + quantity)
+                if len(laptops[i]) < 5:
+                    print(f"Sorry, there is no stock information available for {item}.")
+                    return
+                if int(laptops[i][4]) < quantity:
+                    print(f"Sorry, only {laptops[i][4]} {item}(s) are available in the stock.")
+                    return
+                laptops[i][4] = str(int(laptops[i][4]) - quantity)
                 break
 
     with open('laptops.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerows(laptops)
 
-    print(f'{quantity} {item}(s) added to the stock.')
+    price = 0.0
+    for laptop in laptops:
+        if laptop[0] == item:
+            price = float(laptop[3])
+            break
+
+    total_price = price * quantity
+    if shipping == 'y':
+        total_price += 10.0
+
+    print(f'You have purchased {quantity} {item}(s) for {total_price}.')
 
 def sell_laptop():
     item = input('Enter the laptop name: ')
