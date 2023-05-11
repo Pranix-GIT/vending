@@ -1,101 +1,29 @@
-import csv
+from operations import display_laptops, purchase_laptop, sell_laptop
 
-def display_laptops():
-    with open('laptops.csv', 'r') as f:
-        laptops = csv.reader(f)
-        laptops = list(laptops)
-        print(laptops)
+while True:
+    print("+------------------------------------------------------+")
+    print("\t=== Hamro Laptops Inventory Management System ===")
+    print("+------------------------------------------------------+")
+    print("1. Display Available Laptops")
+    print("2. Purchase a Laptop")
+    print("3. Sell a Laptop")
+    print("4. Exit")
 
-def purchase_laptop():
-    item = input('Enter the laptop name: ')
-    quantity = int(input('Enter the quantity: '))
-    shipping = input('Is shipping required? (y/n): ')
+    print("+------------------------------------------------------+")
+    choice = input("\nEnter your choice (1-4): ")
 
-    with open('laptops.csv', 'r') as f:
-        laptops = csv.reader(f)
-        laptops = list(laptops)
-        for i in range(len(laptops)):
-            if laptops[i][0] == item:
-                if len(laptops[i]) < 5:
-                    print(f"Sorry, there is no stock information available for {item}.")
-                    return
-                if int(laptops[i][4]) < quantity:
-                    print(f"Sorry, only {laptops[i][4]} {item}(s) are available in the stock.")
-                    return
-                laptops[i][4] = str(int(laptops[i][4]) - quantity)
-                break
+    if choice == '1':
+        display_laptops()
 
-    with open('laptops.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerows(laptops)
+    elif choice == '2':
+        purchase_laptop()
 
-    price = 0.0
-    for laptop in laptops:
-        if laptop[0] == item:
-            price = float(laptop[3])
-            break
+    elif choice == '3':
+        sell_laptop()
 
-    total_price = price * quantity
-    if shipping == 'y':
-        total_price += 10.0
+    elif choice == '4':
+        print("Thank you for using Laptops Inventory Management System")
+        break
 
-    print(f'You have purchased {quantity} {item}(s) for {total_price}.')
-
-def sell_laptop():
-    item = input('Enter the laptop name: ')
-    quantity = int(input('Enter the quantity: '))
-    shipping = input('Is shipping required? (y/n): ')
-
-    with open('laptops.csv', 'r') as f:
-        laptops = csv.reader(f)
-        laptops = list(laptops)
-        for i in range(len(laptops)):
-            if laptops[i][0] == item:
-                if int(laptops[i][4]) < quantity:
-                    print(f"Sorry, only {laptops[i][4]} {item}(s) are available in the stock.")
-                    return
-                laptops[i][4] = str(int(laptops[i][4]) - quantity)
-                break
-
-    with open('laptops.csv', 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerows(laptops)
-
-    price = 0.0
-    for laptop in laptops:
-        if laptop[0] == item:
-            price = float(laptop[3])
-            break
-
-    total_price = price * quantity
-    if shipping == 'y':
-        total_price += 10.0
-
-    print(f'You have purchased {quantity} {item}(s) for {total_price}.')
-
-def add_laptop():
-    item = input('Enter the laptop name: ')
-    brand = input('Enter the brand name: ')
-    model = input('Enter the model name: ')
-    price = input('Enter the price: ')
-    stock = input('Enter the stock: ')
-
-    with open('laptops.csv', 'a', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow([item, brand, model, price, stock])
-
-    print(f'{item} added to the stock.')
-
-def remove_laptop():
-    item = input('Enter the laptop name: ')
-
-    with open('laptops.csv', 'r') as f:
-        laptops = csv.reader(f)
-        laptops = list(laptops)
-        for i in range(len(laptops)):
-            if laptops[i][0] == item:
-                laptops.pop(i)
-                break
-
-    with open('laptops.csv', 'w', newline='') as f:
-        writer
+    else:
+        print("Invalid choice! Please try again.")
